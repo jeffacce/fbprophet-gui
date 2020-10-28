@@ -5,186 +5,228 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename="scripts/papaparse.min.js") }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
     <style>
-        #data-textarea {
+        #raw-data {
             font-size: 14px;
             resize: none;
         }
     </style>
 </head>
 
-<body style="height: 100%">
+<body style="height: 100%; overflow: hidden;">
     <nav class="navbar navbar-dark bg-dark mb-2">
         <a class="navbar-brand" href='/'>FB Prophet Time Series Toolkit Test</a>
     </nav>
 
-    <div class="container-fluid m-0">
-        <form>
-            <div class="form-group">
-                <h3 for="raw-data">Step 1. Data</h3>
-                <p>
-                    Choose or paste in CSV.<br/>
-                    Format: <strong>no headers; date in column 1; value in column 2.</strong>
-                </p>
-                <div class="input-group mb-1">
-                    <input type="file" class="custom-file-input" id="raw-data-file-input">
-                    <label class="custom-file-label" for="raw-data-file-input" id="raw-data-file-label">Choose file</label>
+    <div class="row m-2" style="height: 100%;">
+        <div class="container-fluid m-0 col-4 p-4 border" style="overflow: auto; height: 90%">
+            <form>
+                <div class="form-group">
+                    <h3 for="raw-data">Step 1. Data</h3>
+                    <p>
+                        Choose or paste in CSV.<br />
+                        Format: <strong>no headers; date in column 1; value in column 2.</strong>
+                    </p>
+                    <div class="input-group mb-1">
+                        <input type="file" class="custom-file-input" id="raw-data-file-input">
+                        <label class="custom-file-label" for="raw-data-file-input" id="raw-data-file-label">Choose file</label>
+                    </div>
+                    <textarea class="form-control" rows=10 id="raw-data"></textarea>
                 </div>
-                <textarea class="form-control" rows=10 id="raw-data"></textarea>
-            </div>
+        
+                <h3>Step 2. Model Settings</h3>
+                <div class="form-group">
+                    <h5>Growth Assumption</h5>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="growth" id="growth-linear-input" value="linear"
+                            checked>
+                        <label class="form-check-label" for="growth-linear-input">Linear</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="growth" id="growth-log-input" value="logistic">
+                        <label class="form-check-label" for="growth-log-input">Logistic</label>
+                    </div>
+                    <div id="growth-log-cap-floor">
+                        <div class="input-group mb-1">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Logistic growth floor (saturating minimum)</span>
+                            </div>
+                            <input type="number" class="form-control" id="growth-log-floor-input" placeholder="0" value="0">
+                        </div>
+                        <div class="input-group mb-1">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Logistic growth cap (carrying capacity)</span>
+                            </div>
+                            <input type="number" class="form-control" id="growth-log-cap-input">
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="form-group">
+                    <h5>Changepoints</h5>
+                    <div class="input-group mb-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"># of changepoints</span>
+                        </div>
+                        <input type="number" min="0" step="1" class="form-control" id="n-changepoints-input" placeholder="25"
+                            value="25">
+                    </div>
+                    <div class="input-group mb-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Changepoint range</span>
+                        </div>
+                        <input type="number" class="form-control" id="changepoint-range-input" placeholder="0.8" value="0.8">
+                    </div>
+                    <div class="input-group mb-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Changepoint prior scale</span>
+                        </div>
+                        <input type="number" class="form-control" id="changepoint-prior-scale-input" placeholder="0.05"
+                            value="0.05">
+                    </div>
+                </div>
+        
+                <div class="form-group">
+                    <h5>Seasonality</h5>
+        
+                    <h6>Mode</h6>
+                    <div class="form-check form-check-inline mb-1">
+                        <input class="form-check-input" type="radio" name="seasonality-mode"
+                            id="seasonality-mode-additive-input" value="additive" checked>
+                        <label class="form-check-label" for="seasonality-mode-additive-input">Additive</label>
+                    </div>
+                    <div class="form-check form-check-inline mb-1">
+                        <input class="form-check-input" type="radio" name="seasonality-mode"
+                            id="seasonality-mode-multiplicative-input" value="multiplicative">
+                        <label class="form-check-label" for="seasonality-mode-multiplicative-input">Multiplicative</label>
+                    </div>
+        
+                    <h6>Period</h6>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="seasonality" id="auto-seasonality-input"
+                            value="auto_seasonality" checked>
+                        <label class="form-check-label" for="auto-seasonality-input">Auto detect</label>
+                    </div>
+                    <div class="input-group mb-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" for="yearly-seasonality-input">
+                                <input class="mr-2" type="checkbox" name="yearly-seasonality" id="yearly-seasonality-input"
+                                    value="yearly_seasonality" disabled checked>
+                                Yearly, Fourier order (wigglyness) =
+                            </span>
+                        </div>
+                        <input type="number" step="1" min="0" class="form-control" id="yearly-seasonality-order-input"
+                            placeholder="10" value="10">
+                    </div>
+                    <div class="input-group mb-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" for="weekly-seasonality-input">
+                                <input class="mr-2" type="checkbox" name="weekly-seasonality" id="weekly-seasonality-input"
+                                    value="weekly_seasonality" disabled checked>
+                                Weekly, Fourier order (wigglyness) =
+                            </span>
+                        </div>
+                        <input type="number" step="1" min="0" class="form-control" id="weekly-seasonality-order-input"
+                            placeholder="10" value="10">
+                    </div>
+                    <div class="input-group mb-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" for="daily-seasonality-input">
+                                <input class="mr-2" type="checkbox" name="daily-seasonality" id="daily-seasonality-input"
+                                    value="daily_seasonality" disabled>
+                                Daily, Fourier order (wigglyness) =
+                            </span>
+                        </div>
+                        <input type="number" step="1" min="0" class="form-control" id="daily-seasonality-order-input"
+                            placeholder="10" value="10">
+                    </div>
+        
+                    <div class="input-group mb-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Seasonality prior scale</span>
+                        </div>
+                        <input type="number" class="form-control" id="seasonality-prior-scale-input" placeholder="10.0"
+                            value="10.0">
+                    </div>
+                </div>
+        
+                <div class="form-group">
+                    <h5>Sampling</h5>
+                    <div class="input-group mb-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">MCMC samples</span>
+                        </div>
+                        <input type="number" step="1" min="0" class="form-control" id="mcmc-samples-input" placeholder="0"
+                            value="0">
+                    </div>
+                    <div class="input-group mb-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Interval width</span>
+                        </div>
+                        <input type="text" class="form-control" id="interval-width-input" placeholder="0.8" value="0.8">
+                    </div>
+                    <div class="input-group mb-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Uncertainty samples</span>
+                        </div>
+                        <input type="text" step="1" min="0" class="form-control" id="uncertainty-samples-input"
+                            placeholder="1000" value="1000">
+                    </div>
+                </div>
+        
+                <div class="form-group">
+                    <h5>Prediction</h5>
+                    <div class="input-group mb-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Prediction periods</span>
+                        </div>
+                        <input type="number" min="0" step="1" class="form-control text-right" id="periods-input" placeholder="0"
+                            value="0">
+        
+                        <!-- <div class="input-group-prepend">
+                                <span class="input-group-text">Prediction period frequency</span>
+                            </div> -->
+                        <select class="custom-select col-2" id="freq-input">
+                            <option value='Y'>Years</option>
+                            <option value='M'>Months</option>
+                            <option value='D' selected>Days</option>
+                            <option value='H'>Hours</option>
+                            <option value='M'>Minutes</option>
+                            <option value='S'>Seconds</option>
+                        </select>
+                    </div>
+                    <div class="form-check form-check-inline mb-1">
+                        <input class="form-check-input" type="checkbox" name="include-history" id="include-history-input"
+                            value="include_history" checked>
+                        <label class="form-check-label" for="include-history-input">Include history</label>
+                    </div>
+                </div>
+        
+                <div class="input-group">
+                    <button type="button" class="btn btn-primary" id="submit-button">
+                        <div class="spinner-border spinner-border-sm" role="status" id="spinner-running" hidden>
+                            <span class="sr-only">Running...</span>
+                        </div>
+                        Step 3. Submit and Run
+                    </button>
+                </div>
+            </form>
+        </div>
 
-            <h3>Step 2. Model Settings</h3>
-            <div class="form-group">
-                <h5>Growth Assumption</h5>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="growth" id="growth-linear-input" value="linear" checked>
-                    <label class="form-check-label" for="growth-linear-input">Linear</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="growth" id="growth-log-input" value="logistic">
-                    <label class="form-check-label" for="growth-log-input">Logistic</label>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <h5>Changepoints</h5>
-                <div class="input-group mb-1">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"># of changepoints</span>
-                    </div>
-                    <input type="number" min="0" step="1" class="form-control" id="n-changepoints-input" placeholder="25" value="25">
-                </div>
-                <div class="input-group mb-1">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Changepoint range</span>
-                    </div>
-                    <input type="number" class="form-control" id="changepoint-range-input" placeholder="0.8" value="0.8">
-                </div>
-                <div class="input-group mb-1">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Changepoint prior scale</span>
-                    </div>
-                    <input type="number" class="form-control" id="changepoint-prior-scale-input" placeholder="0.05" value="0.05">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <h5>Seasonality</h5>
-
-                <h6>Mode</h6>
-                <div class="form-check form-check-inline mb-1">
-                    <input class="form-check-input" type="radio" name="seasonality-mode" id="seasonality-mode-additive-input" value="additive" checked>
-                    <label class="form-check-label" for="seasonality-mode-additive-input">Additive</label>
-                </div>
-                <div class="form-check form-check-inline mb-1">
-                    <input class="form-check-input" type="radio" name="seasonality-mode" id="seasonality-mode-multiplicative-input" value="multiplicative">
-                    <label class="form-check-label" for="seasonality-mode-multiplicative-input">Multiplicative</label>
-                </div>
-
-                <h6>Period</h6>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="seasonality" id="auto-seasonality-input" value="auto_seasonality" checked>
-                    <label class="form-check-label" for="auto-seasonality-input">Auto detect</label>
-                </div>
-                <div class="input-group mb-1">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" for="yearly-seasonality-input">
-                            <input class="mr-2" type="checkbox" name="yearly-seasonality" id="yearly-seasonality-input" value="yearly_seasonality" disabled checked>
-                            Yearly, fourier order (wigglyness) = 
-                        </span>
-                    </div>
-                    <input type="number" step="1" min="0" class="form-control" id="yearly-seasonality-order-input" placeholder="10" value="10">
-                </div>
-                <div class="input-group mb-1">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" for="weekly-seasonality-input">
-                            <input class="mr-2" type="checkbox" name="weekly-seasonality" id="weekly-seasonality-input"
-                                value="weekly_seasonality" disabled checked>
-                            Weekly, fourier order (wigglyness) =
-                        </span>
-                    </div>
-                    <input type="number" step="1" min="0" class="form-control" id="weekly-seasonality-order-input" placeholder="10"
-                        value="10">
-                </div>
-                <div class="input-group mb-1">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" for="daily-seasonality-input">
-                            <input class="mr-2" type="checkbox" name="daily-seasonality" id="daily-seasonality-input"
-                                value="daily_seasonality" disabled>
-                            Daily, fourier order (wigglyness) =
-                        </span>
-                    </div>
-                    <input type="number" step="1" min="0" class="form-control" id="daily-seasonality-order-input" placeholder="10"
-                        value="10">
-                </div>
-
-                <div class="input-group mb-1">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Seasonality prior scale</span>
-                    </div>
-                    <input type="number" class="form-control" id="seasonality-prior-scale-input" placeholder="10.0" value="10.0">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <h5>Sampling</h5>
-                <div class="input-group mb-1">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">MCMC samples</span>
-                    </div>
-                    <input type="number" step="1" min="0" class="form-control" id="mcmc-samples-input" placeholder="0" value="0">
-                </div>
-                <div class="input-group mb-1">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Interval width</span>
-                    </div>
-                    <input type="text" class="form-control" id="interval-width-input" placeholder="0.8" value="0.8">
-                </div>
-                <div class="input-group mb-1">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Uncertainty samples</span>
-                    </div>
-                    <input type="text" step="1" min="0" class="form-control" id="uncertainty-samples-input" placeholder="1000" value="1000">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <h5>Prediction</h5>
-                <div class="input-group mb-1">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Prediction periods</span>
-                    </div>
-                    <input type="number" min="0" step="1" class="form-control" id="periods-input" placeholder="0" value="0">
-                    
-                    <!-- <div class="input-group-prepend">
-                        <span class="input-group-text">Prediction period frequency</span>
-                    </div> -->
-                    <select class="custom-select" id="freq-input">
-                        <option value='Y'>Years</option>
-                        <option value='M'>Months</option>
-                        <option value='D' selected>Days</option>
-                        <option value='H'>Hours</option>
-                        <option value='M'>Minutes</option>
-                        <option value='S'>Seconds</option>
-                    </select>
-                </div>
-                <div class="form-check form-check-inline mb-1">
-                    <input class="form-check-input" type="checkbox" name="include-history" id="include-history-input" value="include_history" checked>
-                    <label class="form-check-label" for="include-history-input">Include history</label>
-                </div>
-            </div>
-
-            <div class="input-group mb-3">
-                <button type="button" class="btn btn-primary" id="submit-button">
-                    <div class="spinner-border spinner-border-sm" role="status" id="spinner-running" hidden>
-                        <span class="sr-only">Running...</span>
-                    </div>
-                    Step 3. Submit and Run
+        <div class="container-fluid m-0 col-8">
+            <h3>Prediction Chart</h3>
+            <p>
+                Click on the legends to enable/disable data series.
+                <button type="button" class="btn btn-primary ml-2" id="download-button" disabled>
+                    Download results (CSV)
                 </button>
-            </div>
-
-        </form>
+            </p>
+            
+            <canvas id="chart-prediction"></canvas>
+        </div>
     </div>
+
     <script src="{{ url_for('static', filename="scripts/client.js") }}"></script>
 </body>
 

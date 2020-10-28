@@ -42,6 +42,9 @@ def handle_raw():
 
     df = pd.DataFrame(request.json).dropna()
     df['ds'] = pd.to_datetime(df['ds'])
+    for col in ['cap', 'floor', 'y']:
+        if col in df:
+            df[col] = df[col].astype(float)
     m.fit(df)
     
     future = m.make_future_dataframe(
@@ -49,6 +52,10 @@ def handle_raw():
         freq=request.json.get('freq', 'D'),
         include_history=request.json.get('include_history', True),
     )
+    if 'cap' in df:
+        future['cap'] = df['cap'].iloc[0]
+    if 'floor' in df:
+        future['floor'] = df['floor'].iloc[0]
 
     forecast = m.predict(future)
     result = forecast.to_csv(encoding='utf-8-sig', sep=',', index=False)

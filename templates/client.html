@@ -88,11 +88,11 @@
                 </div>
                 </br>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="yearly-seasonality" id="yearly-seasonality-input" value="yearly_seasonality" disabled>
+                    <input class="form-check-input" type="checkbox" name="yearly-seasonality" id="yearly-seasonality-input" value="yearly_seasonality" disabled checked>
                     <label class="form-check-label" for="yearly-seasonality-input">Yearly</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="weekly-seasonality" id="weekly-seasonality-input" value="weekly_seasonality" disabled>
+                    <input class="form-check-input" type="checkbox" name="weekly-seasonality" id="weekly-seasonality-input" value="weekly_seasonality" disabled checked>
                     <label class="form-check-label" for="weekly-seasonality-input">Weekly</label>
                 </div>
                 <div class="form-check form-check-inline mb-1">
@@ -137,18 +137,17 @@
                         <span class="input-group-text">Prediction periods</span>
                     </div>
                     <input type="number" min="0" step="1" class="form-control" id="periods-input" placeholder="0" value="0">
-                </div>
-                <div class="input-group mb-1">
-                    <div class="input-group-prepend">
+                    
+                    <!-- <div class="input-group-prepend">
                         <span class="input-group-text">Prediction period frequency</span>
-                    </div>
+                    </div> -->
                     <select class="custom-select" id="freq-input">
-                        <option value='Y'>Year</option>
-                        <option value='M'>Month</option>
-                        <option value='D' selected>Day</option>
-                        <option value='H'>Hour</option>
-                        <option value='M'>Minute</option>
-                        <option value='S'>Second</option>
+                        <option value='Y'>Years</option>
+                        <option value='M'>Months</option>
+                        <option value='D' selected>Days</option>
+                        <option value='H'>Hours</option>
+                        <option value='M'>Minutes</option>
+                        <option value='S'>Seconds</option>
                     </select>
                 </div>
                 <div class="form-check form-check-inline mb-1">
@@ -158,8 +157,14 @@
             </div>
 
             <div class="input-group mb-3">
-                <button type="button" class="btn btn-primary" id="submit-button">Step 3. Submit and Run</button>
+                <button type="button" class="btn btn-primary" id="submit-button">
+                    <div class="spinner-border spinner-border-sm" role="status" id="spinner-running" hidden>
+                        <span class="sr-only">Running...</span>
+                    </div>
+                    Step 3. Submit and Run
+                </button>
             </div>
+
         </form>
     </div>
     <script src="{{ url_for('static', filename="scripts/client.js") }}"></script>

@@ -75,10 +75,12 @@ function sendRequest() {
         success: (data, status, xhr) => {
             download('prediction.csv', data);
             $('#submit-button')[0].disabled = false;
+            $('#spinner-running')[0].hidden = true;
         },
         error: () => {
             alert('Oops. Something broke!');
             $('#submit-button')[0].disabled = false;
+            $('#spinner-running')[0].hidden = true;
         },
         timeout: 60000,
     });
@@ -125,4 +127,5 @@ $('#raw-data-file-input').change(() => {
 $('#submit-button').on('click', () => {
     sendRequest();
     $('#submit-button')[0].disabled = true;
+    $("#spinner-running")[0].hidden = false;
 })

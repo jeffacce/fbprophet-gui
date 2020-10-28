@@ -82,22 +82,40 @@
                 </div>
 
                 <h6>Period</h6>
-                <div class="form-check form-check-inline">
+                <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="seasonality" id="auto-seasonality-input" value="auto_seasonality" checked>
                     <label class="form-check-label" for="auto-seasonality-input">Auto detect</label>
                 </div>
-                </br>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="yearly-seasonality" id="yearly-seasonality-input" value="yearly_seasonality" disabled checked>
-                    <label class="form-check-label" for="yearly-seasonality-input">Yearly</label>
+                <div class="input-group mb-1">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" for="yearly-seasonality-input">
+                            <input class="mr-2" type="checkbox" name="yearly-seasonality" id="yearly-seasonality-input" value="yearly_seasonality" disabled checked>
+                            Yearly, fourier order (wigglyness) = 
+                        </span>
+                    </div>
+                    <input type="number" step="1" min="0" class="form-control" id="yearly-seasonality-order-input" placeholder="10" value="10">
                 </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="weekly-seasonality" id="weekly-seasonality-input" value="weekly_seasonality" disabled checked>
-                    <label class="form-check-label" for="weekly-seasonality-input">Weekly</label>
+                <div class="input-group mb-1">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" for="weekly-seasonality-input">
+                            <input class="mr-2" type="checkbox" name="weekly-seasonality" id="weekly-seasonality-input"
+                                value="weekly_seasonality" disabled checked>
+                            Weekly, fourier order (wigglyness) =
+                        </span>
+                    </div>
+                    <input type="number" step="1" min="0" class="form-control" id="weekly-seasonality-order-input" placeholder="10"
+                        value="10">
                 </div>
-                <div class="form-check form-check-inline mb-1">
-                    <input class="form-check-input" type="checkbox" name="daily-seasonality" id="daily-seasonality-input" value="daily_seasonality" disabled>
-                    <label class="form-check-label" for="daily-seasonality-input">Daily</label>
+                <div class="input-group mb-1">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" for="daily-seasonality-input">
+                            <input class="mr-2" type="checkbox" name="daily-seasonality" id="daily-seasonality-input"
+                                value="daily_seasonality" disabled>
+                            Daily, fourier order (wigglyness) =
+                        </span>
+                    </div>
+                    <input type="number" step="1" min="0" class="form-control" id="daily-seasonality-order-input" placeholder="10"
+                        value="10">
                 </div>
 
                 <div class="input-group mb-1">

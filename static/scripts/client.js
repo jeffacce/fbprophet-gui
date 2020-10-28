@@ -62,9 +62,19 @@ function generateRequest() {
         result['weekly_seasonality'] = 'auto';
         result['daily_seasonality'] = 'auto';
     };
+    if ($('#yearly-seasonality-input')[0].checked) {
+        result['yearly_seasonality'] = $('#yearly-seasonality-order-input').val();
+    }
+    if ($('#weekly-seasonality-input')[0].checked) {
+        result['weekly_seasonality'] = $('#weekly-seasonality-order-input').val();
+    }
+    if ($('#daily-seasonality-input')[0].checked) {
+        result['daily_seasonality'] = $('#daily-seasonality-order-input').val();
+    }
 
     return result;
 }
+
 
 function sendRequest() {
     $.ajax('/prophet/api/v1/raw', {

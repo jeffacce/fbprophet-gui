@@ -47,16 +47,17 @@
                         <input class="form-check-input" type="radio" name="growth" id="growth-log-input" value="logistic">
                         <label class="form-check-label" for="growth-log-input">Logistic</label>
                     </div>
-                    <div id="growth-log-cap-floor">
+                    <div id="growth-log-cap-floor" hidden>
+                        <p class="text-primary"><small>Floor and cap assumptions must be specified.</small></p>
                         <div class="input-group mb-1">
                             <div class="input-group-prepend">
-                                <span class="input-group-text">Logistic growth floor (saturating minimum)</span>
+                                <span class="input-group-text">Logistic growth floor</span>
                             </div>
                             <input type="number" class="form-control" id="growth-log-floor-input" placeholder="0" value="0">
                         </div>
                         <div class="input-group mb-1">
                             <div class="input-group-prepend">
-                                <span class="input-group-text">Logistic growth cap (carrying capacity)</span>
+                                <span class="input-group-text">Logistic growth cap</span>
                             </div>
                             <input type="number" class="form-control" id="growth-log-cap-input">
                         </div>
@@ -110,33 +111,33 @@
                     </div>
                     <div class="input-group mb-1">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" for="yearly-seasonality-input">
+                            <label class="input-group-text" for="yearly-seasonality-input">
                                 <input class="mr-2" type="checkbox" name="yearly-seasonality" id="yearly-seasonality-input"
                                     value="yearly_seasonality" disabled checked>
                                 Yearly, Fourier order (wigglyness) =
-                            </span>
+                            </label>
                         </div>
                         <input type="number" step="1" min="0" class="form-control" id="yearly-seasonality-order-input"
                             placeholder="10" value="10">
                     </div>
                     <div class="input-group mb-1">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" for="weekly-seasonality-input">
+                            <label class="input-group-text" for="weekly-seasonality-input">
                                 <input class="mr-2" type="checkbox" name="weekly-seasonality" id="weekly-seasonality-input"
                                     value="weekly_seasonality" disabled checked>
                                 Weekly, Fourier order (wigglyness) =
-                            </span>
+                            </label>
                         </div>
                         <input type="number" step="1" min="0" class="form-control" id="weekly-seasonality-order-input"
                             placeholder="10" value="10">
                     </div>
                     <div class="input-group mb-1">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" for="daily-seasonality-input">
+                            <label class="input-group-text" for="daily-seasonality-input">
                                 <input class="mr-2" type="checkbox" name="daily-seasonality" id="daily-seasonality-input"
                                     value="daily_seasonality" disabled>
                                 Daily, Fourier order (wigglyness) =
-                            </span>
+                            </label>
                         </div>
                         <input type="number" step="1" min="0" class="form-control" id="daily-seasonality-order-input"
                             placeholder="10" value="10">
@@ -184,10 +185,7 @@
                         <input type="number" min="0" step="1" class="form-control text-right" id="periods-input" placeholder="0"
                             value="0">
         
-                        <!-- <div class="input-group-prepend">
-                                <span class="input-group-text">Prediction period frequency</span>
-                            </div> -->
-                        <select class="custom-select col-2" id="freq-input">
+                        <select class="custom-select" id="freq-input">
                             <option value='Y'>Years</option>
                             <option value='M'>Months</option>
                             <option value='D' selected>Days</option>
@@ -214,7 +212,7 @@
             </form>
         </div>
 
-        <div class="container-fluid m-0 col-8">
+        <div class="container-fluid m-0 col-8" id="chart-container">
             <h3>Prediction Chart</h3>
             <p>
                 Click on the legends to enable/disable data series.

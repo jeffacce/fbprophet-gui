@@ -35,6 +35,7 @@ function transpose(a) {
 var raw = {};
 var pred = {};
 var pred_csv = null;
+var charts = [];
 
 
 function parseData(text) {
@@ -47,6 +48,10 @@ function parseData(text) {
 
 
 function renderChart(pred) {
+    resetCanvas();
+    for (var elem in charts) {
+        elem.destroy();
+    }
     var ctx = $('#chart-prediction')[0].getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'line',
@@ -136,7 +141,16 @@ function renderChart(pred) {
             ],
         },
     });
+    charts.push(myCharts);
+    return myCharts;
 }
+
+// https://stackoverflow.com/questions/24815851/how-to-clear-a-chart-from-a-canvas-so-that-hover-events-cannot-be-triggered
+function resetCanvas() {
+    $('#chart-prediction').remove();
+    $('#chart-container').append('<canvas id="chart-prediction"></canvas>');
+    var ctx = $('#chart-prediction')[0].getContext('2d');
+};
 
 
 function generateRequest() {
@@ -266,6 +280,10 @@ $('#auto-seasonality-input').change(() => {
     $('#daily-seasonality-input')[0].disabled = elem.checked;
 })
 
+$('input[name="growth"]').change(() => {
+    var isLogGrowth = $('input[name="growth"]:checked').val() == 'logistic';
+    $('#growth-log-cap-floor')[0].hidden = !isLogGrowth;
+})
 
 $('#raw-data-file-input').change(() => {
     var fileToRead = $("#raw-data-file-input")[0].files[0];
@@ -289,5 +307,4 @@ $('#download-button').on('click', () => {
     download('prediction.csv', pred_csv);
 })
 
-var ctx = document.getElementById('chart-prediction').getContext('2d');
 renderChart({});

@@ -285,11 +285,6 @@ $('#raw-data-file-input').change(() => {
     loadFileAsText(fileToRead);
 })
 
-$("#raw-data").bind('input propertychange', () => {
-    var data = parseData($("#raw-data")[0].value);
-    renderChart(data[0], data[1]);
-})
-
 $('#submit-button').on('click', () => {
     checkValidity();
     sendRequest();

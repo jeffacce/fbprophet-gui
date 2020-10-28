@@ -35,7 +35,6 @@ function transpose(a) {
 var raw = {};
 var pred = {};
 var pred_csv = null;
-var charts = [];
 
 
 function parseData(text) {
@@ -49,9 +48,6 @@ function parseData(text) {
 
 function renderChart(pred) {
     resetCanvas();
-    for (var elem in charts) {
-        elem.destroy();
-    }
     var ctx = $('#chart-prediction')[0].getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'line',
@@ -141,7 +137,6 @@ function renderChart(pred) {
             ],
         },
     });
-    charts.push(myChart);
     return myChart;
 }
 

@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('client.html')
+    return render_template('index.html')
 
 
 @app.route('/prophet/api/v1/raw', methods=['POST'])

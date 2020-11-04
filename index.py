@@ -53,7 +53,11 @@ def handle_raw():
             monthly_seasonality = 10
         m.add_seasonality(period=30.4375, fourier_order=monthly_seasonality, name='monthly')
 
-    df = pd.DataFrame(request.json).dropna()
+    df = pd.DataFrame({
+        'ds': request.json['ds'],
+        'y': request.json['y'],
+    }).dropna()
+
     df['ds'] = pd.to_datetime(df['ds'])
     for col in ['cap', 'floor', 'y']:
         if col in df:
@@ -71,6 +75,17 @@ def handle_raw():
         future['floor'] = df['floor'].iloc[0]
 
     forecast = m.predict(future)
+    forecast = pd.merge(
+        forecast, df,
+        on='ds',
+        how='left',
+    )
+    
+    if request.json['seasonality_mode'] == 'additive':
+        forecast['y_deseasonalized'] = forecast['y'] - forecast['additive_terms']
+    elif request.json['seasonality_mode'] == 'multiplicative':
+        forecast['y_deseasonalized'] = forecast['y'] - forecast['trend'] * forecast['multiplicative_terms']
+
     result = forecast.to_csv(encoding='utf-8-sig', sep=',', index=False)
     return json.dumps(result), 200
 

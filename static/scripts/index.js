@@ -69,6 +69,14 @@ function renderChart(pred) {
             labels: pred['ds'],
             datasets: [
                 {
+                    label: 'Raw',
+                    data: pred['y'],
+                    fill: false,
+                    borderWidth: 0,
+                    pointRadius: 1,
+                    backgroundColor: "#1f1f1f",
+                },
+                {
                     label: 'Prediction',
                     data: pred['yhat'],
                     fill: false,
@@ -103,6 +111,16 @@ function renderChart(pred) {
                     pointRadius: 1,
                     backgroundColor: "#1a0a94",
                     borderColor: "#1a0a94",
+                },
+                {
+                    label: 'Deseasonalized Raw',
+                    data: pred['y_deseasonalized'],
+                    fill: false,
+                    hidden: true,
+                    borderWidth: 0,
+                    pointRadius: 1,
+                    backgroundColor: "#85003b",
+                    borderColor: "#85003b",
                 },
                 {
                     label: 'Yearly seasonality',

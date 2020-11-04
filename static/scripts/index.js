@@ -115,6 +115,16 @@ function renderChart(pred) {
                     borderColor: "#5e5e5e",
                 },
                 {
+                    label: 'Monthly seasonality',
+                    data: pred['monthly'],
+                    fill: false,
+                    hidden: true,
+                    borderWidth: 0,
+                    pointRadius: 1,
+                    backgroundColor: "#5e5e5e",
+                    borderColor: "#5e5e5e",
+                },
+                {
                     label: 'Weekly seasonality',
                     data: pred['weekly'],
                     fill: false,
@@ -161,6 +171,7 @@ function generateRequest() {
         'yearly_seasonality': $('#yearly-seasonality-input')[0].checked,
         'weekly_seasonality': $('#weekly-seasonality-input')[0].checked,
         'daily_seasonality': $('#daily-seasonality-input')[0].checked,
+        'monthly_seasonality': $('#monthly-seasonality-input')[0].checked,
         'seasonality_mode': $('input[name="seasonality-mode"]:checked').val(),
         'seasonality_prior_scale': parseFloat($('#seasonality-prior-scale-input').val()),
         'mcmc_samples': parseInt($('#mcmc-samples-input').val()),
@@ -191,6 +202,9 @@ function generateRequest() {
     }
     if ($('#daily-seasonality-input')[0].checked) {
         result['daily_seasonality'] = parseInt($('#daily-seasonality-order-input').val()) || 10;
+    }
+    if ($('#monthly-seasonality-input')[0].checked) {
+        result['monthly_seasonality'] = parseInt($('#monthly-seasonality-order-input').val()) || 10;
     }
 
     return result;

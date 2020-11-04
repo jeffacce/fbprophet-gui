@@ -40,6 +40,12 @@ def handle_raw():
         uncertainty_samples=int(request.json.get('uncertainty_samples', 1000)),
     )
 
+    monthly_seasonality = request.json.get('monthly_seasonality')
+    if monthly_seasonality:
+        if monthly_seasonality == True:
+            monthly_seasonality = 10
+        m.add_seasonality(period=30.4375, fourier_order=monthly_seasonality, name='monthly')
+
     df = pd.DataFrame(request.json).dropna()
     df['ds'] = pd.to_datetime(df['ds'])
     for col in ['cap', 'floor', 'y']:

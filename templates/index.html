@@ -142,6 +142,19 @@
                         <input type="number" step="1" min="0" class="form-control" id="daily-seasonality-order-input"
                             placeholder="10" value="10">
                     </div>
+                    <p class="text-primary"><small>FB Prophet does not support auto monthly seasonality.
+                    <br/>To add monthly seasonality, check the box below.</small></p>
+                    <div class="input-group mb-1">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="monthly-seasonality-input">
+                                <input class="mr-2" type="checkbox" name="monthly-seasonality" id="monthly-seasonality-input"
+                                    value="monthly_seasonality">
+                                Monthly, Fourier order (wigglyness) =
+                            </label>
+                        </div>
+                        <input type="number" step="1" min="0" class="form-control" id="monthly-seasonality-order-input"
+                            placeholder="10" value="10">
+                    </div> 
         
                     <div class="input-group mb-1">
                         <div class="input-group-prepend">

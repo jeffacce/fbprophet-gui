@@ -1,4 +1,5 @@
 from flask import Flask, request, abort, render_template
+from flask_cachebuster import CacheBuster
 import pandas as pd
 import numpy as np
 from fbprophet import Prophet
@@ -7,6 +8,12 @@ import json
 
 
 app = Flask(__name__)
+config = {
+    'extensions': ['.js', '.html', '.css'],
+    'hash_size': 5,
+}
+cache_buster = CacheBuster(config=config)
+cache_buster.init_app(app)
 
 
 @app.route('/')

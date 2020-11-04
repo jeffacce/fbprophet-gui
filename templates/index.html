@@ -10,6 +10,7 @@
         #raw-data {
             font-size: 14px;
             resize: none;
+            font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
         }
     </style>
 </head>
@@ -24,10 +25,10 @@
             <form>
                 <div class="form-group">
                     <h3 for="raw-data">Step 1. Data</h3>
-                    <p>
+                    <p class="text-primary"><small>
                         Choose or paste in CSV.<br />
                         Format: <strong>no headers; date in column 1; value in column 2.</strong>
-                    </p>
+                    </small></p>
                     <div class="input-group mb-1">
                         <input type="file" class="custom-file-input" id="raw-data-file-input">
                         <label class="custom-file-label" for="raw-data-file-input" id="raw-data-file-label">Choose file</label>
@@ -226,12 +227,12 @@
         </div>
 
         <div class="container-fluid m-0 col-8" id="chart-container">
-            <h3>Prediction Chart</h3>
+            <h3 class="m-2">Prediction Chart</h3>
             <p>
-                Click on the legends to enable/disable data series.
-                <button type="button" class="btn btn-primary ml-2" id="download-button" disabled>
+                <button type="button" class="btn btn-primary m-2" id="download-button" disabled>
                     Download results (CSV)
                 </button>
+                <small class="text-primary">Click on the legends to enable/disable data series.</small>
             </p>
             
             <canvas id="chart-prediction"></canvas>

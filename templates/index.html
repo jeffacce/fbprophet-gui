@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html style="height: 100%">
 <head>
+    <title>FB Prophet Time Series Toolkit</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" crossorigin="anonymous"></script>
@@ -10,14 +11,14 @@
         #raw-data {
             font-size: 14px;
             resize: none;
-            font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+            font-family: "Consolas","Monaco","Lucida Console","Liberation Mono","DejaVu Sans Mono","Bitstream Vera Sans Mono","Courier New", monospace;
         }
     </style>
 </head>
 
 <body style="height: 100%; overflow: hidden;">
     <nav class="navbar navbar-dark bg-dark mb-2">
-        <a class="navbar-brand" href='/'>FB Prophet Time Series Toolkit Test</a>
+        <a class="navbar-brand" href='/'>FB Prophet Time Series Toolkit</a>
     </nav>
 
     <div class="row m-2" style="height: 100%;">
@@ -232,7 +233,7 @@
                 <button type="button" class="btn btn-primary m-2" id="download-button" disabled>
                     Download results (CSV)
                 </button>
-                <small class="text-primary">Click on the legends to enable/disable data series.</small>
+                <small class="text-primary">Click on the legends to show/hide data series.</small>
             </p>
             
             <canvas id="chart-prediction"></canvas>

@@ -38,7 +38,7 @@ var pred_csv = null;
 
 
 function parseData(text) {
-    var result = Papa.parse(text, config={'dynamicTyping': true}).data;
+    var result = Papa.parse(text, config={'dynamicTyping': true, skipEmptyLines: true,}).data;
     result = transpose(result);
     raw['x'] = result[0];
     raw['y'] = result[1];
@@ -197,7 +197,7 @@ function generateRequest() {
         'uncertainty_samples': parseInt($('#uncertainty-samples-input').val()),
         'periods': parseInt($('#periods-input').val()),
         'freq': $('#freq-input').val(),
-        'include_history': $('#include-history-input').val(),
+        'include_history': $('#include-history-input')[0].checked,
     };
 
     if (result['growth'] == 'logistic') {

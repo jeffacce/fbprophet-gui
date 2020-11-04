@@ -31,16 +31,19 @@ def handle_raw():
     )
     if not valid:
         abort(400)
+
+    growth = request.json.get('growth', 'linear')
+    seasonality_mode = request.json.get('seasonality_mode', 'additive')
     
     m = Prophet(
-        growth=request.json.get('growth', 'linear'),
+        growth=growth,
         n_changepoints=int(request.json.get('n_changepoints', 25)),
         changepoint_range=float(request.json.get('changepoint_range', 0.8)),
         changepoint_prior_scale=float(request.json.get('changepoint_prior_scale', 0.05)),
         yearly_seasonality=request.json.get('yearly_seasonality', 'auto'),
         weekly_seasonality=request.json.get('weekly_seasonality', 'auto'),
         daily_seasonality=request.json.get('daily_seasonality', 'auto'),
-        seasonality_mode=request.json.get('seasonality_mode', 'additive'),
+        seasonality_mode=seasonality_mode,
         seasonality_prior_scale=float(request.json.get('seasonality_prior_scale', 10.0)),
         mcmc_samples=int(request.json.get('mcmc_samples', 0)),
         interval_width=float(request.json.get('interval_width', 0.8)),
@@ -56,7 +59,15 @@ def handle_raw():
     df = pd.DataFrame({
         'ds': request.json['ds'],
         'y': request.json['y'],
-    }).dropna()
+    })
+
+    if growth == 'logistic':
+        if 'cap' in request.json:
+            df['cap'] = request.json['cap']
+        if 'floor' in request.json:
+            df['floor'] = request.json['floor']
+
+    df = df.dropna()
 
     df['ds'] = pd.to_datetime(df['ds'])
     for col in ['cap', 'floor', 'y']:
@@ -81,9 +92,9 @@ def handle_raw():
         how='left',
     )
     
-    if request.json['seasonality_mode'] == 'additive':
+    if seasonality_mode == 'additive':
         forecast['y_deseasonalized'] = forecast['y'] - forecast['additive_terms']
-    elif request.json['seasonality_mode'] == 'multiplicative':
+    elif seasonality_mode == 'multiplicative':
         forecast['y_deseasonalized'] = forecast['y'] - forecast['trend'] * forecast['multiplicative_terms']
 
     result = forecast.to_csv(encoding='utf-8-sig', sep=',', index=False)

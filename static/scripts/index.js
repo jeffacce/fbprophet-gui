@@ -184,7 +184,7 @@ function generateRequest() {
         'y': data[1],
         'growth': $('input[name="growth"]:checked').val(),
         'n_changepoints': parseInt($('#n-changepoints-input').val()),
-        'changepoint_range': parseFloat($('#changepoint-range-input').val()),
+        'changepoint_range': parseFloat($('#changepoint-range-input').val()) / 100.0,
         'changepoint_prior_scale': parseFloat($('#changepoint-prior-scale-input').val()),
         'yearly_seasonality': $('#yearly-seasonality-input')[0].checked,
         'weekly_seasonality': $('#weekly-seasonality-input')[0].checked,
@@ -192,9 +192,7 @@ function generateRequest() {
         'monthly_seasonality': $('#monthly-seasonality-input')[0].checked,
         'seasonality_mode': $('input[name="seasonality-mode"]:checked').val(),
         'seasonality_prior_scale': parseFloat($('#seasonality-prior-scale-input').val()),
-        'mcmc_samples': parseInt($('#mcmc-samples-input').val()),
-        'interval_width': parseFloat($('#interval-width-input').val()),
-        'uncertainty_samples': parseInt($('#uncertainty-samples-input').val()),
+        'interval_width': parseFloat($('#interval-width-input').val()) / 100.0,
         'periods': parseInt($('#periods-input').val()),
         'freq': $('#freq-input').val(),
         'include_history': $('#include-history-input')[0].checked,
@@ -329,4 +327,15 @@ $('#download-button').on('click', () => {
     download('prediction.csv', pred_csv);
 })
 
+$('#more-settings-a').on('click', () => {
+    var hiddenState = !$('#more-settings-div')[0].hidden;
+    $('#more-settings-div')[0].hidden = hiddenState;
+    if (hiddenState) {
+        $('#more-settings-title')[0].innerText = "+ More Settings";
+    } else {
+        $('#more-settings-title')[0].innerText = "– More Settings";
+    }
+})
+
 renderChart({});
+

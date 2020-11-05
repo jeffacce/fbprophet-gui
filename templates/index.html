@@ -34,11 +34,100 @@
                         <input type="file" class="custom-file-input" id="raw-data-file-input">
                         <label class="custom-file-label" for="raw-data-file-input" id="raw-data-file-label">Choose file</label>
                     </div>
-                    <textarea class="form-control" rows=10 id="raw-data"></textarea>
+                    <textarea class="form-control" rows=8 id="raw-data"></textarea>
                 </div>
         
                 <h3>Step 2. Model Settings</h3>
                 <div class="form-group">
+                </div>
+        
+                <div class="form-group">
+                    <h5>Seasonality</h5>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="seasonality" id="auto-seasonality-input"
+                            value="auto_seasonality" checked>
+                        <label class="form-check-label" for="auto-seasonality-input">Auto detect seasonality</label>
+                    </div>
+                    <p class="text-primary mb-0"><small>Flexibility: larger = more wiggles, higher frequency.</small></p>
+                    <p class="text-secondary"><small>(Actually it's just Fourier series order. 1 = simple sine.)</small></p>
+                    <div class="input-group mb-1">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="yearly-seasonality-input">
+                                <input class="mr-2" type="checkbox" name="yearly-seasonality" id="yearly-seasonality-input"
+                                    value="yearly_seasonality" disabled checked>
+                                Yearly seasonality, flexibility =
+                            </label>
+                        </div>
+                        <input type="number" step="1" min="0" class="form-control" id="yearly-seasonality-order-input"
+                            placeholder="10" value="10">
+                    </div>
+                    <div class="input-group mb-1">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="weekly-seasonality-input">
+                                <input class="mr-2" type="checkbox" name="weekly-seasonality" id="weekly-seasonality-input"
+                                    value="weekly_seasonality" disabled checked>
+                                Weekly seasonality, flexibility =
+                            </label>
+                        </div>
+                        <input type="number" step="1" min="0" class="form-control" id="weekly-seasonality-order-input"
+                            placeholder="10" value="10">
+                    </div>
+                    <div class="input-group mb-1">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="daily-seasonality-input">
+                                <input class="mr-2" type="checkbox" name="daily-seasonality" id="daily-seasonality-input"
+                                    value="daily_seasonality" disabled>
+                                Daily seasonality, flexibility =
+                            </label>
+                        </div>
+                        <input type="number" step="1" min="0" class="form-control" id="daily-seasonality-order-input"
+                            placeholder="10" value="10">
+                    </div>
+                    <p class="text-primary mb-0"><small>To add monthly seasonality, check the box below manually.</small></p>
+                    <p class="text-secondary mb-1"><small>FB Prophet can't detect monthly seasonality.</small></p>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="monthly-seasonality-input">
+                                <input class="mr-2" type="checkbox" name="monthly-seasonality" id="monthly-seasonality-input"
+                                    value="monthly_seasonality">
+                                Monthly seasonality, flexibility =
+                            </label>
+                        </div>
+                        <input type="number" step="1" min="0" class="form-control" id="monthly-seasonality-order-input"
+                            placeholder="10" value="10">
+                    </div> 
+        
+                </div>
+        
+        
+                <div class="form-group">
+                    <h5>Prediction</h5>
+                    <div class="input-group mb-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Predict future</span>
+                        </div>
+                        <input type="number" min="0" step="1" class="form-control text-right" id="periods-input" placeholder="0"
+                            value="0">
+        
+                        <select class="custom-select" id="freq-input">
+                            <option value='Y'>Years</option>
+                            <option value='M'>Months</option>
+                            <option value='D' selected>Days</option>
+                            <option value='H'>Hours</option>
+                            <option value='M'>Minutes</option>
+                            <option value='S'>Seconds</option>
+                        </select>
+                    </div>
+                    <div class="form-check form-check-inline mb-1">
+                        <input class="form-check-input" type="checkbox" name="include-history" id="include-history-input"
+                            value="include_history" checked>
+                        <label class="form-check-label" for="include-history-input">Include history</label>
+                    </div>
+                </div>
+                <hr/>
+
+                <a href="#" id="more-settings-a"><h3 class="text-muted" id="more-settings-title">+ More Settings</h3></a>
+                <div class="form-group" id="more-settings-div" hidden>
                     <h5>Growth Assumption</h5>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="growth" id="growth-linear-input" value="linear"
@@ -64,36 +153,16 @@
                             <input type="number" class="form-control" id="growth-log-cap-input">
                         </div>
                     </div>
-                </div>
         
-                <div class="form-group">
-                    <h5>Changepoints</h5>
-                    <div class="input-group mb-1">
+                    <div class="input-group mb-2">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"># of changepoints</span>
-                        </div>
-                        <input type="number" min="0" step="1" class="form-control" id="n-changepoints-input" placeholder="25"
-                            value="25">
-                    </div>
-                    <div class="input-group mb-1">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">Changepoint range</span>
-                        </div>
-                        <input type="number" class="form-control" id="changepoint-range-input" placeholder="0.8" value="0.8">
-                    </div>
-                    <div class="input-group mb-1">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">Changepoint prior scale</span>
+                            <span class="input-group-text">Trend flexibility (0 = straight line)</span>
                         </div>
                         <input type="number" class="form-control" id="changepoint-prior-scale-input" placeholder="0.05"
                             value="0.05">
                     </div>
-                </div>
-        
-                <div class="form-group">
+
                     <h5>Seasonality</h5>
-        
-                    <h6>Mode</h6>
                     <div class="form-check form-check-inline mb-1">
                         <input class="form-check-input" type="radio" name="seasonality-mode"
                             id="seasonality-mode-additive-input" value="additive" checked>
@@ -104,118 +173,40 @@
                             id="seasonality-mode-multiplicative-input" value="multiplicative">
                         <label class="form-check-label" for="seasonality-mode-multiplicative-input">Multiplicative</label>
                     </div>
-        
-                    <h6>Period</h6>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="seasonality" id="auto-seasonality-input"
-                            value="auto_seasonality" checked>
-                        <label class="form-check-label" for="auto-seasonality-input">Auto detect</label>
-                    </div>
-                    <div class="input-group mb-1">
+                    <div class="input-group mb-2">
                         <div class="input-group-prepend">
-                            <label class="input-group-text" for="yearly-seasonality-input">
-                                <input class="mr-2" type="checkbox" name="yearly-seasonality" id="yearly-seasonality-input"
-                                    value="yearly_seasonality" disabled checked>
-                                Yearly, Fourier order (wigglyness) =
-                            </label>
-                        </div>
-                        <input type="number" step="1" min="0" class="form-control" id="yearly-seasonality-order-input"
-                            placeholder="10" value="10">
-                    </div>
-                    <div class="input-group mb-1">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="weekly-seasonality-input">
-                                <input class="mr-2" type="checkbox" name="weekly-seasonality" id="weekly-seasonality-input"
-                                    value="weekly_seasonality" disabled checked>
-                                Weekly, Fourier order (wigglyness) =
-                            </label>
-                        </div>
-                        <input type="number" step="1" min="0" class="form-control" id="weekly-seasonality-order-input"
-                            placeholder="10" value="10">
-                    </div>
-                    <div class="input-group mb-1">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="daily-seasonality-input">
-                                <input class="mr-2" type="checkbox" name="daily-seasonality" id="daily-seasonality-input"
-                                    value="daily_seasonality" disabled>
-                                Daily, Fourier order (wigglyness) =
-                            </label>
-                        </div>
-                        <input type="number" step="1" min="0" class="form-control" id="daily-seasonality-order-input"
-                            placeholder="10" value="10">
-                    </div>
-                    <p class="text-primary"><small>FB Prophet does not support auto monthly seasonality.
-                    <br/>To add monthly seasonality, check the box below.</small></p>
-                    <div class="input-group mb-1">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="monthly-seasonality-input">
-                                <input class="mr-2" type="checkbox" name="monthly-seasonality" id="monthly-seasonality-input"
-                                    value="monthly_seasonality">
-                                Monthly, Fourier order (wigglyness) =
-                            </label>
-                        </div>
-                        <input type="number" step="1" min="0" class="form-control" id="monthly-seasonality-order-input"
-                            placeholder="10" value="10">
-                    </div> 
-        
-                    <div class="input-group mb-1">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">Seasonality prior scale</span>
+                            <span class="input-group-text">Seasonality weight</span>
                         </div>
                         <input type="number" class="form-control" id="seasonality-prior-scale-input" placeholder="10.0"
                             value="10.0">
                     </div>
-                </div>
-        
-                <div class="form-group">
-                    <h5>Sampling</h5>
+
+                    <h5>Trend</h5>
                     <div class="input-group mb-1">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">MCMC samples</span>
+                            <span class="input-group-text"># of potential trend changes</span>
                         </div>
-                        <input type="number" step="1" min="0" class="form-control" id="mcmc-samples-input" placeholder="0"
-                            value="0">
+                        <input type="number" min="0" step="1" class="form-control" id="n-changepoints-input" placeholder="25"
+                            value="25">
                     </div>
-                    <div class="input-group mb-1">
+                    <div class="input-group mb-2">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">Interval width</span>
+                            <span class="input-group-text">Limit trend changes to the first</span>
                         </div>
-                        <input type="text" class="form-control" id="interval-width-input" placeholder="0.8" value="0.8">
-                    </div>
-                    <div class="input-group mb-1">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">Uncertainty samples</span>
+                        <input type="number" min="0" max="100" class="form-control text-right" id="changepoint-range-input" placeholder="80" value="80">
+                        <div class="input-group-append">
+                            <span class="input-group-text">% of the data</span>
                         </div>
-                        <input type="text" step="1" min="0" class="form-control" id="uncertainty-samples-input"
-                            placeholder="1000" value="1000">
                     </div>
-                </div>
-        
-                <div class="form-group">
+
                     <h5>Prediction</h5>
                     <div class="input-group mb-1">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">Prediction periods</span>
+                            <span class="input-group-text">Confidence interval (%)</span>
                         </div>
-                        <input type="number" min="0" step="1" class="form-control text-right" id="periods-input" placeholder="0"
-                            value="0">
-        
-                        <select class="custom-select" id="freq-input">
-                            <option value='Y'>Years</option>
-                            <option value='M'>Months</option>
-                            <option value='D' selected>Days</option>
-                            <option value='H'>Hours</option>
-                            <option value='M'>Minutes</option>
-                            <option value='S'>Seconds</option>
-                        </select>
-                    </div>
-                    <div class="form-check form-check-inline mb-1">
-                        <input class="form-check-input" type="checkbox" name="include-history" id="include-history-input"
-                            value="include_history" checked>
-                        <label class="form-check-label" for="include-history-input">Include history</label>
+                        <input type="number" min="0" max="100" class="form-control" id="interval-width-input" placeholder="80" value="80">
                     </div>
                 </div>
-        
                 <div class="input-group">
                     <button type="button" class="btn btn-primary" id="submit-button">
                         <div class="spinner-border spinner-border-sm" role="status" id="spinner-running" hidden>
@@ -224,6 +215,7 @@
                         Step 3. Submit and Run
                     </button>
                 </div>
+        
             </form>
         </div>
 

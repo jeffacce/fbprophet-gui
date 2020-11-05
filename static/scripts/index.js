@@ -32,7 +32,6 @@ function transpose(a) {
   return t;
 }
 
-var raw = {};
 var pred = {};
 var pred_csv = null;
 
@@ -40,8 +39,6 @@ var pred_csv = null;
 function parseData(text) {
     var result = Papa.parse(text, config={'dynamicTyping': true, skipEmptyLines: true,}).data;
     result = transpose(result);
-    raw['x'] = result[0];
-    raw['y'] = result[1];
     return result;
 }
 
@@ -282,6 +279,10 @@ function loadFileAsText(fileToLoad){
     fileReader.onload = function() {
         $("#raw-data")[0].value = fileReader.result;
         var data = parseData($("#raw-data")[0].value);
+        renderChart({
+            'ds': data[0],
+            'y': data[1],
+        });
     }
     fileReader.readAsText(fileToLoad);
 }
@@ -298,22 +299,31 @@ function checkValidity() {
 }
 
 
+$('#raw-data').bind('input propertychange', function() {
+    var data = parseData($("#raw-data")[0].value);
+    renderChart({
+        'ds': data[0],
+        'y': data[1],
+    });
+});
+
+
 $('#auto-seasonality-input').change(() => {
     var elem = $('#auto-seasonality-input')[0];
     $('#yearly-seasonality-input')[0].disabled = elem.checked;
     $('#weekly-seasonality-input')[0].disabled = elem.checked;
     $('#daily-seasonality-input')[0].disabled = elem.checked;
-})
+});
 
 $('input[name="growth"]').change(() => {
     var isLogGrowth = $('input[name="growth"]:checked').val() == 'logistic';
     $('#growth-log-cap-floor')[0].hidden = !isLogGrowth;
-})
+});
 
 $('#raw-data-file-input').change(() => {
     var fileToRead = $("#raw-data-file-input")[0].files[0];
     loadFileAsText(fileToRead);
-})
+});
 
 $('#submit-button').on('click', () => {
     checkValidity();
@@ -321,11 +331,11 @@ $('#submit-button').on('click', () => {
     $('#submit-button')[0].disabled = true;
     $('#download-button')[0].disabled = true;
     $("#spinner-running")[0].hidden = false;
-})
+});
 
 $('#download-button').on('click', () => {
     download('prediction.csv', pred_csv);
-})
+});
 
 $('#more-settings-a').on('click', () => {
     var hiddenState = !$('#more-settings-div')[0].hidden;
@@ -335,7 +345,7 @@ $('#more-settings-a').on('click', () => {
     } else {
         $('#more-settings-title')[0].innerText = "– More Settings";
     }
-})
+});
 
 renderChart({});
 

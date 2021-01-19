@@ -23,17 +23,16 @@
     </nav>
 
     <div class="row m-2" style="height: 100%;">
-        <div class="container m-0 col-4 pl-4 pr-4 pt-2 border" style="overflow: auto; height: 90%">
+        <div class="container m-0 col-4 pt-2 border-right" style="overflow: auto; height: 90%">
+            <nav>
+                <div class="nav nav-tabs nav-fill nav-pills mb-2 border-bottom" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-data-tab" data-toggle="tab" href="#nav-data" role="tab" aria-controls="data" aria-selected="true">Data</a>
+                    <a class="nav-item nav-link" id="nav-model-tab" data-toggle="tab" href="#nav-model" role="tab" aria-controls="model" aria-selected="false">Model</a>
+                    <a class="nav-item nav-link" id="nav-advanced-tab" data-toggle="tab" href="#nav-advanced" role="tab" aria-controls="advanced" aria-selected="false">Advanced</a>
+                </div>
+            </nav>
             <form>
                 <div>
-                    <nav>
-                        <div class="nav nav-tabs nav-fill nav-pills mb-2 border" id="nav-tab" role="tablist">
-                            <a class="nav-item nav-link active" id="nav-data-tab" data-toggle="tab" href="#nav-data" role="tab" aria-controls="data" aria-selected="true">Data</a>
-                            <a class="nav-item nav-link" id="nav-model-tab" data-toggle="tab" href="#nav-model" role="tab" aria-controls="model" aria-selected="false">Model</a>
-                            <a class="nav-item nav-link" id="nav-advanced-tab" data-toggle="tab" href="#nav-advanced" role="tab" aria-controls="advanced" aria-selected="false">Advanced</a>
-                        </div>
-                    </nav>
-
                     <div class="input-group mt-2 mb-2 justify-content-end">
                         <button type="button" class="btn btn-primary" id="submit-button">
                             <div class="spinner-border spinner-border-sm" role="status" id="spinner-running" hidden>

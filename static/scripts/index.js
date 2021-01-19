@@ -295,6 +295,10 @@ function checkValidity() {
             return false;
         }
     }
+    if ($('#raw-data')[0].value.length == 0) {
+        alert('Please provide data first.')
+        return false;
+    }
     return true;
 }
 
@@ -326,26 +330,16 @@ $('#raw-data-file-input').change(() => {
 });
 
 $('#submit-button').on('click', () => {
-    checkValidity();
-    sendRequest();
-    $('#submit-button')[0].disabled = true;
-    $('#download-button')[0].disabled = true;
-    $("#spinner-running")[0].hidden = false;
+    if (checkValidity()) {
+        sendRequest();
+        $('#submit-button')[0].disabled = true;
+        $('#download-button')[0].disabled = true;
+        $("#spinner-running")[0].hidden = false;
+    }
 });
 
 $('#download-button').on('click', () => {
     download('prediction.csv', pred_csv);
 });
 
-$('#more-settings-a').on('click', () => {
-    var hiddenState = !$('#more-settings-div')[0].hidden;
-    $('#more-settings-div')[0].hidden = hiddenState;
-    if (hiddenState) {
-        $('#more-settings-title')[0].innerText = "+ More Settings";
-    } else {
-        $('#more-settings-title')[0].innerText = "– More Settings";
-    }
-});
-
 renderChart({});
-

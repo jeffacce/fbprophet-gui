@@ -67,7 +67,7 @@ def handle_raw():
         if 'floor' in request.json:
             df['floor'] = request.json['floor']
 
-    df = df.dropna()
+    df = df.dropna(how='all')
 
     df['ds'] = pd.to_datetime(df['ds'])
     for col in ['cap', 'floor', 'y']:
